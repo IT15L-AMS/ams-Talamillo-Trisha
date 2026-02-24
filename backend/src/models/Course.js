@@ -16,12 +16,14 @@ class Course {
     }
   }
 
-  
   static async getAll({ activeOnly = true } = {}) {
     const conn = await pool.getConnection();
     try {
       const [rows] = await conn.execute(
-        `SELECT * FROM courses${activeOnly ? " WHERE is_active=1" : ""}`,
+        `SELECT c.*, u.full_name AS instructor_name
+         FROM courses c
+         LEFT JOIN users u ON c.instructor_id = u.id
+         ${activeOnly ? "WHERE c.is_active=1" : ""}`,
       );
       return rows;
     } finally {
@@ -32,9 +34,13 @@ class Course {
   static async getById(id) {
     const conn = await pool.getConnection();
     try {
-      const [rows] = await conn.execute(`SELECT * FROM courses WHERE id=?`, [
-        id,
-      ]);
+      const [rows] = await conn.execute(
+        `SELECT c.*, u.full_name AS instructor_name
+         FROM courses c
+         LEFT JOIN users u ON c.instructor_id = u.id
+         WHERE c.id = ?`,
+        [id],
+      );
       return rows[0] || null;
     } finally {
       conn.release();

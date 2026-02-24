@@ -11,7 +11,8 @@ const enrollStudent = async (req, res) => {
     const id = await Enrollment.enroll({ student_id, course_id });
     res.status(201).json({ success: true, message: "Student enrolled", id });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    console.error("Enrollment error:", err);
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
@@ -20,7 +21,8 @@ const dropCourse = async (req, res) => {
     await Enrollment.drop(req.params.id);
     res.json({ success: true, message: "Course dropped" });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    console.error("Drop enrollment error:", err);
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
@@ -29,7 +31,8 @@ const getEnrollments = async (req, res) => {
     const enrollments = await Enrollment.getAll();
     res.json({ success: true, enrollments });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    console.error("Get enrollments error:", err);
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
@@ -38,7 +41,8 @@ const getStudentEnrollments = async (req, res) => {
     const enrollments = await Enrollment.getByStudent(req.params.student_id);
     res.json({ success: true, enrollments });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    console.error("Get student enrollments error:", err);
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 

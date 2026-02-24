@@ -46,9 +46,11 @@ class Grade {
     const conn = await pool.getConnection();
     try {
       const [rows] = await conn.execute(
-        `SELECT g.* FROM grades g
+        `SELECT g.*, c.course_code, c.title AS course_title
+         FROM grades g
          JOIN enrollments e ON g.enrollment_id = e.id
-         WHERE e.student_id=?`,
+         JOIN courses c ON e.course_id = c.id
+         WHERE e.student_id = ?`,
         [student_id],
       );
       return rows;

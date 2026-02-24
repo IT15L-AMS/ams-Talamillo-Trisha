@@ -11,7 +11,8 @@ const assignGrade = async (req, res) => {
     const id = await Grade.assign({ enrollment_id, grade, assigned_by });
     res.status(201).json({ success: true, message: "Grade assigned", id });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    console.error("Assign grade error:", err);
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
@@ -21,7 +22,8 @@ const updateGrade = async (req, res) => {
     await Grade.update(req.params.id, { grade });
     res.json({ success: true, message: "Grade updated" });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    console.error("Update grade error:", err);
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
@@ -30,7 +32,8 @@ const getGrades = async (req, res) => {
     const grades = await Grade.getAll();
     res.json({ success: true, grades });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    console.error("Get grades error:", err);
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
@@ -39,7 +42,8 @@ const getStudentGrades = async (req, res) => {
     const grades = await Grade.getByStudent(req.params.student_id);
     res.json({ success: true, grades });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    console.error("Get student grades error:", err);
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
