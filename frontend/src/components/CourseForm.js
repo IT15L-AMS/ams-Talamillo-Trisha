@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import apiService from "../services/apiService";
 import "../styles/CourseForm.css";
 
@@ -8,9 +8,10 @@ const CourseForm = ({ onSuccess, onCancel, initialData, token }) => {
       course_code: "",
       title: "",
       units: 3,
-      instructor_name: null,
+      instructor_id: null,
     },
   );
+  const [instructors, setInstructors] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -19,13 +20,43 @@ const CourseForm = ({ onSuccess, onCancel, initialData, token }) => {
     setFormData((prev) => ({
       ...prev,
       [name]:
-        name === "units" || name === "instructor_name"
+        name === "units" || name === "instructor_id"
           ? value
-            ? name === "units" ? parseInt(value) : value
+            ? parseInt(value)
             : null
           : value,
     }));
   };
+
+  useEffect(() => {
+    const loadInstructors = async () => {
+      try {
+        if (!token) return setInstructors([]);
+        // Quick decode to check role in token; avoid fetching users for non-admins
+        const parseJwt = (tkn) => {
+          try {
+            return JSON.parse(atob(tkn.split(".")[1]));
+          } catch (e) {
+            return null;
+          }
+        };
+        const decoded = parseJwt(token);
+        if (!decoded || (decoded.role || "").toLowerCase() !== "admin") {
+          return setInstructors([]);
+        }
+
+        const res = await apiService.getUsers(token, 100, 0);
+        const users = res.data.data || [];
+        const ins = users.filter(
+          (u) => (u.role || "").toLowerCase() === "instructor",
+        );
+        setInstructors(ins);
+      } catch (err) {
+        setInstructors([]);
+      }
+    };
+    loadInstructors();
+  }, [token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -96,16 +127,21 @@ const CourseForm = ({ onSuccess, onCancel, initialData, token }) => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="instructor_name">Instructor Name:</label>
-          <input
-            type="text"
-            name="instructor_name"
-            id="instructor_name"
-            value={formData.instructor_name || ""}
+          <label htmlFor="instructor_id">Instructor (optional):</label>
+          <select
+            name="instructor_id"
+            id="instructor_id"
+            value={formData.instructor_id || ""}
             onChange={handleChange}
-            placeholder="Instructor Name"
-          />
-          <small>Enter the name of the instructor</small>
+          >
+            <option value="">-- Unassigned --</option>
+            {instructors.map((ins) => (
+              <option key={ins.id} value={ins.id}>
+                {ins.fullName || ins.full_name} (ID: {ins.id})
+              </option>
+            ))}
+          </select>
+          <small>Select an instructor to assign to this course</small>
         </div>
 
         <div className="button-group">

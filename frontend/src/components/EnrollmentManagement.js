@@ -45,7 +45,7 @@ const EnrollmentManagement = ({ token, user }) => {
     ? enrollments.filter((e) => {
         const term = searchTerm.toLowerCase();
         return (
-          String(e.student_id || "")
+          String(e.student_code || "")
             .toLowerCase()
             .includes(term) ||
           String(e.student_name || "")
@@ -149,7 +149,9 @@ const EnrollmentManagement = ({ token, user }) => {
             {filteredEnrollments.length > 0 ? (
               filteredEnrollments.map((enrollment) => (
                 <tr key={enrollment.id} className="em-row">
-                  <td className="em-cell">{enrollment.student_id}</td>
+                  <td className="em-cell">
+                    {enrollment.student_code || enrollment.student_id}
+                  </td>
                   <td className="em-cell">{enrollment.student_name}</td>
                   <td className="em-cell">{enrollment.course_code}</td>
                   <td className="em-cell">{enrollment.course_title}</td>

@@ -14,6 +14,7 @@ import StudentList from "./components/StudentList";
 import StudentManagement from "./components/StudentManagement";
 import CourseManagement from "./components/CourseManagement";
 import EnrollmentManagement from "./components/EnrollmentManagement";
+import UserManagement from "./components/UserManagement";
 import "./styles/global.css";
 
 function App() {
@@ -102,6 +103,9 @@ function App() {
                 <Link to="/enrollments" style={styles.navLink}>
                   Enrollments
                 </Link>
+                <Link to="/users" style={styles.navLink}>
+                  Users
+                </Link>
               </>
             )}
 
@@ -159,6 +163,7 @@ function App() {
                 path="/enrollments"
                 element={<EnrollmentManagement user={user} token={token} />}
               />
+              <Route path="/users" element={<UserManagement token={token} />} />
             </>
           )}
 

@@ -16,22 +16,19 @@ const GradeForm = ({ onSuccess, onCancel, token, userId }) => {
 
   const loadEnrollments = async () => {
     try {
-      // Get all enrollments
-      const res = await apiService.apiService.get(
-        "http://localhost:3000/api/enrollments",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+      const res = await apiService.getEnrollments(token);
+      const list = Array.isArray(res.data?.enrollments)
+        ? res.data.enrollments
+        : Array.isArray(res.data)
+          ? res.data
+          : [];
 
-      // Format enrollments with student and course info
-      const formatted =
-        res.data.enrollments?.map((e) => ({
-          ...e,
-          label: `Student ${e.student_id} - Course ${e.course_id}`,
-        })) || [];
+      const formatted = list.map((e) => ({
+        ...e,
+        label: `${e.student_name || e.student_id} - ${e.course_code || e.course_id}`,
+      }));
 
-      setEnrollments(formatted);
+      setEnrollments(formatted || []);
     } catch (err) {
       setError("Error loading enrollments");
       console.error(err);

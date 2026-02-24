@@ -14,6 +14,11 @@ const apiService = {
     axios.get(`${API_URL}/auth/profile`, {
       headers: { Authorization: `Bearer ${token}` },
     }),
+  // Users (admin)
+  getUsers: (token, limit = 50, offset = 0) =>
+    axios.get(`${API_URL}/auth/users?limit=${limit}&offset=${offset}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    }),
 
   // Students
   createStudent: (data, token) =>
