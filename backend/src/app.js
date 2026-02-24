@@ -3,6 +3,11 @@ const cors = require("cors");
 require("dotenv").config();
 
 const authRoutes = require("./routes/auth");
+const studentRoutes = require("./routes/students");
+const courseRoutes = require("./routes/courses");
+const enrollmentRoutes = require("./routes/enrollments");
+const gradeRoutes = require("./routes/grades");
+const dashboardRoutes = require("./routes/dashboard");
 const { errorHandler, notFoundHandler } = require("./middleware/errorHandler");
 
 const app = express();
@@ -28,9 +33,13 @@ app.get("/health", (req, res) => {
 
 // API Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/students", studentRoutes);
+app.use("/api/courses", courseRoutes);
+app.use("/api/enrollments", enrollmentRoutes);
+app.use("/api/grades", gradeRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
-
- //Root endpoint
+//Root endpoint
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,

@@ -12,26 +12,19 @@ const { authenticate, authorize } = require("../middleware/auth");
 
 const router = express.Router();
 
-/**
- * Public Routes
- */
-
+//Public Routes
 router.post("/register", register);
 
 router.post("/login", login);
 
 router.post("/refresh", refreshToken);
 
-/**
- * Protected Routes (Requires Authentication)
- */
+//Protected Routes (Requires Authentication)
 
 // Get current user profile
 router.get("/profile", authenticate, getProfile);
 
-/**
- * Admin Only Routes
- */
+//Admin Only Routes
 
 router.get("/users", authenticate, authorize("admin"), getAllUsers);
 

@@ -1,9 +1,8 @@
 const validator = require("validator");
 
 class Validation {
-  /**
-   * Validate email format
-   */
+  //Validate email format
+   
   static isValidEmail(email) {
     return validator.isEmail(email);
   }
@@ -22,23 +21,15 @@ class Validation {
     });
   }
 
-  /**
-   * Validate string is not empty
-   */
   static isNotEmpty(str) {
     return validator.trim(str).length > 0;
   }
 
-  /**
-   * Sanitize email
-   */
+
   static sanitizeEmail(email) {
     return validator.normalizeEmail(email);
   }
 
-  /**
-   * Validate registration input
-   */
   static validateRegistration(data) {
     const errors = {};
 
@@ -70,9 +61,7 @@ class Validation {
     return Object.keys(errors).length === 0 ? null : errors;
   }
 
-  /**
-   * Validate login input
-   */
+
   static validateLogin(data) {
     const errors = {};
 

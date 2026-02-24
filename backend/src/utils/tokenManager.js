@@ -1,9 +1,8 @@
 const jwt = require("jsonwebtoken");
 
 class TokenManager {
-  /**
-   * Generate Access Token
-   */
+  //Generate Access Token
+   
   static generateAccessToken(userId, role) {
     const payload = {
       userId,
@@ -17,9 +16,6 @@ class TokenManager {
     });
   }
 
-  /**
-   * Generate Refresh Token
-   */
   static generateRefreshToken(userId) {
     const payload = {
       userId,
@@ -32,9 +28,7 @@ class TokenManager {
     });
   }
 
-  /**
-   * Verify Access Token
-   */
+
   static verifyAccessToken(token) {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -47,9 +41,6 @@ class TokenManager {
     }
   }
 
-  /**
-   * Verify Refresh Token
-   */
   static verifyRefreshToken(token) {
     try {
       const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
@@ -62,9 +53,8 @@ class TokenManager {
     }
   }
 
-  /**
-   * Decode token without verification
-   */
+  //Decode token without verification
+   
   static decodeToken(token) {
     return jwt.decode(token);
   }

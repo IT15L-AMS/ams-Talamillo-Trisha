@@ -2,9 +2,7 @@ const pool = require("../config/database");
 const bcrypt = require("bcryptjs");
 
 class User {
-  /**
-   * Create a new user
-   */
+  
   static async create(userData) {
     const connection = await pool.getConnection();
     try {
@@ -50,7 +48,6 @@ class User {
     }
   }
 
-  //find user by id
   static async findById(id) {
     const connection = await pool.getConnection();
     try {
@@ -69,7 +66,6 @@ class User {
     }
   }
 
-  //check if email already exists
   static async emailExists(email) {
     const connection = await pool.getConnection();
     try {
