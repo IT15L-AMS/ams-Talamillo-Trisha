@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import apiService from "../services/apiService";
+import "../styles/StudentForm.css";
 
 const StudentForm = ({ onSuccess, onCancel, initialData, token }) => {
   const [formData, setFormData] = useState(
@@ -44,16 +45,17 @@ const StudentForm = ({ onSuccess, onCancel, initialData, token }) => {
   };
 
   return (
-    <div style={styles.formContainer}>
+    <div className="form-container">
       <h3>{initialData?.id ? "Edit Student" : "Create New Student"}</h3>
-      {error && <div style={styles.error}>{error}</div>}
+      {error && <div className="error">{error}</div>}
 
       <form onSubmit={handleSubmit}>
-        <div style={styles.formGroup}>
-          <label>Student ID:</label>
+        <div className="form-group">
+          <label htmlFor="student_id">Student ID:</label>
           <input
             type="text"
             name="student_id"
+            id="student_id"
             value={formData.student_id}
             onChange={handleChange}
             disabled={!!initialData?.id}
@@ -62,11 +64,12 @@ const StudentForm = ({ onSuccess, onCancel, initialData, token }) => {
           />
         </div>
 
-        <div style={styles.formGroup}>
-          <label>Full Name:</label>
+        <div className="form-group">
+          <label htmlFor="full_name">Full Name:</label>
           <input
             type="text"
             name="full_name"
+            id="full_name"
             value={formData.full_name}
             onChange={handleChange}
             required
@@ -74,11 +77,12 @@ const StudentForm = ({ onSuccess, onCancel, initialData, token }) => {
           />
         </div>
 
-        <div style={styles.formGroup}>
-          <label>Email:</label>
+        <div className="form-group">
+          <label htmlFor="email">Email:</label>
           <input
             type="email"
             name="email"
+            id="email"
             value={formData.email}
             onChange={handleChange}
             required
@@ -86,10 +90,11 @@ const StudentForm = ({ onSuccess, onCancel, initialData, token }) => {
           />
         </div>
 
-        <div style={styles.formGroup}>
-          <label>Year Level:</label>
+        <div className="form-group">
+          <label htmlFor="year_level">Year Level:</label>
           <select
             name="year_level"
+            id="year_level"
             value={formData.year_level}
             onChange={handleChange}
           >
@@ -100,11 +105,12 @@ const StudentForm = ({ onSuccess, onCancel, initialData, token }) => {
           </select>
         </div>
 
-        <div style={styles.formGroup}>
-          <label>Program:</label>
+        <div className="form-group">
+          <label htmlFor="program">Program:</label>
           <input
             type="text"
             name="program"
+            id="program"
             value={formData.program}
             onChange={handleChange}
             required
@@ -112,11 +118,11 @@ const StudentForm = ({ onSuccess, onCancel, initialData, token }) => {
           />
         </div>
 
-        <div style={styles.buttonGroup}>
-          <button type="submit" style={styles.submitBtn} disabled={loading}>
+        <div className="button-group">
+          <button type="submit" className="submit-btn" disabled={loading}>
             {loading ? "Saving..." : "Save Student"}
           </button>
-          <button type="button" style={styles.cancelBtn} onClick={onCancel}>
+          <button type="button" className="cancel-btn" onClick={onCancel}>
             Cancel
           </button>
         </div>
@@ -125,48 +131,6 @@ const StudentForm = ({ onSuccess, onCancel, initialData, token }) => {
   );
 };
 
-const styles = {
-  formContainer: {
-    backgroundColor: "white",
-    padding: "20px",
-    borderRadius: "8px",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-    maxWidth: "600px",
-    margin: "20px auto",
-  },
-  formGroup: {
-    marginBottom: "15px",
-  },
-  error: {
-    color: "#d32f2f",
-    backgroundColor: "#ffebee",
-    padding: "12px",
-    borderRadius: "4px",
-    marginBottom: "15px",
-  },
-  buttonGroup: {
-    display: "flex",
-    gap: "10px",
-    marginTop: "20px",
-  },
-  submitBtn: {
-    flex: 1,
-    padding: "10px",
-    backgroundColor: "#4CAF50",
-    color: "white",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-  },
-  cancelBtn: {
-    flex: 1,
-    padding: "10px",
-    backgroundColor: "#f44336",
-    color: "white",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-  },
-};
+// ...existing code...
 
 export default StudentForm;

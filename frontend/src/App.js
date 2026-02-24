@@ -8,12 +8,13 @@ import {
 } from "react-router-dom";
 import Login from "./components/Login";
 import AdminDashboard from "./components/AdminDashboard";
+import InstructorDashboard from "./components/InstructorDashboard";
 import StudentDashboard from "./components/StudentDashboard";
 import StudentList from "./components/StudentList";
 import StudentManagement from "./components/StudentManagement";
 import CourseManagement from "./components/CourseManagement";
 import EnrollmentManagement from "./components/EnrollmentManagement";
-import "./App.css";
+import "./styles/global.css";
 
 function App() {
   const [user, setUser] = useState(() => {
@@ -134,7 +135,7 @@ function App() {
           {user.role === "instructor" && (
             <Route
               path="/"
-              element={<AdminDashboard user={user} token={token} />}
+              element={<InstructorDashboard user={user} token={token} />}
             />
           )}
           {user.role === "registrar" && (

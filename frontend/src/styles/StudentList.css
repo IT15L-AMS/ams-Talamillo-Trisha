@@ -1,0 +1,15 @@
+/* StudentList styles */
+.student-list-container {
+  padding: 20px;
+}
+.student-list-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.student-list-thead tr {
+  background-color: #f5f5f5;
+}
+.student-list-th, .student-list-td {
+  border: 1px solid #ddd;
+  padding: 10px;
+}

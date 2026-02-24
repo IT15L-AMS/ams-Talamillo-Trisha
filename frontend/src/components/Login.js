@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import apiService from "../services/apiService";
+import "../styles/login.css";
 
 const Login = ({ onLogin }) => {
   const [email, setEmail] = useState("");
@@ -38,139 +39,48 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#f5f5f5",
-      }}
-    >
-      <div
-        style={{
-          maxWidth: "400px",
-          width: "100%",
-          padding: "40px",
-          backgroundColor: "white",
-          borderRadius: "8px",
-          boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-        }}
-      >
-        <h2
-          style={{ textAlign: "center", color: "#333", marginBottom: "30px" }}
-        >
-          Academic Management System
-        </h2>
-        <h3
-          style={{
-            textAlign: "center",
-            color: "#666",
-            marginBottom: "30px",
-            fontSize: "16px",
-          }}
-        >
-          Sign In to Your Account
-        </h3>
-        {error && (
-          <p
-            style={{
-              color: "#d32f2f",
-              backgroundColor: "#ffebee",
-              padding: "12px",
-              borderRadius: "4px",
-              marginBottom: "20px",
-            }}
-          >
-            {error}
-          </p>
-        )}
+    <div className="login-container">
+      <div className="login-box">
+        <h2 className="login-title">Academic Management System</h2>
+        <h3 className="login-subtitle">Sign In to Your Account</h3>
+        {error && <p className="login-error">{error}</p>}
         <form onSubmit={handleLogin}>
-          <div style={{ marginBottom: "15px" }}>
-            <label
-              style={{
-                display: "block",
-                marginBottom: "5px",
-                color: "#333",
-                fontWeight: "bold",
-              }}
-            >
+          <div className="login-form-group">
+            <label className="login-label" htmlFor="email">
               Email
             </label>
             <input
+              className="login-input"
               type="email"
+              id="email"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              style={{
-                width: "100%",
-                padding: "12px",
-                border: "1px solid #ddd",
-                borderRadius: "4px",
-                boxSizing: "border-box",
-                fontSize: "14px",
-              }}
             />
           </div>
-          <div style={{ marginBottom: "20px" }}>
-            <label
-              style={{
-                display: "block",
-                marginBottom: "5px",
-                color: "#333",
-                fontWeight: "bold",
-              }}
-            >
+          <div className="login-form-group">
+            <label className="login-label" htmlFor="password">
               Password
             </label>
             <input
+              className="login-input"
               type="password"
+              id="password"
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              style={{
-                width: "100%",
-                padding: "12px",
-                border: "1px solid #ddd",
-                borderRadius: "4px",
-                boxSizing: "border-box",
-                fontSize: "14px",
-              }}
             />
           </div>
-          <button
-            type="submit"
-            style={{
-              width: "100%",
-              padding: "12px",
-              backgroundColor: "#007bff",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              fontSize: "16px",
-              fontWeight: "bold",
-              cursor: "pointer",
-              transition: "background-color 0.3s",
-            }}
-            onMouseOver={(e) => (e.target.style.backgroundColor = "#0056b3")}
-            onMouseOut={(e) => (e.target.style.backgroundColor = "#007bff")}
-          >
+          <button type="submit" className="login-btn">
             Sign In
           </button>
         </form>
-        <div
-          style={{
-            marginTop: "20px",
-            textAlign: "center",
-            color: "#666",
-            fontSize: "14px",
-          }}
-        >
+        <div className="login-demo">
           <p>Demo Credentials:</p>
-          <p style={{ margin: "5px 0" }}>Email: admin@example.com</p>
-          <p style={{ margin: "5px 0" }}>Password: (check database)</p>
+          <p>Email: admin@example.com</p>
+          <p>Password: (check database)</p>
         </div>
       </div>
     </div>

@@ -90,15 +90,16 @@ const GradeForm = ({ onSuccess, onCancel, token, userId }) => {
   ];
 
   return (
-    <div style={styles.formContainer}>
+    <div className="form-container">
       <h3>Assign Grade</h3>
-      {error && <div style={styles.error}>{error}</div>}
+      {error && <div className="error">{error}</div>}
 
       <form onSubmit={handleSubmit}>
-        <div style={styles.formGroup}>
-          <label>Enrollment:</label>
+        <div className="form-group">
+          <label htmlFor="enrollment_id">Enrollment:</label>
           <select
             name="enrollment_id"
+            id="enrollment_id"
             value={formData.enrollment_id}
             onChange={handleChange}
             required
@@ -112,10 +113,11 @@ const GradeForm = ({ onSuccess, onCancel, token, userId }) => {
           </select>
         </div>
 
-        <div style={styles.formGroup}>
-          <label>Grade:</label>
+        <div className="form-group">
+          <label htmlFor="grade">Grade:</label>
           <select
             name="grade"
+            id="grade"
             value={formData.grade}
             onChange={handleChange}
             required
@@ -129,11 +131,11 @@ const GradeForm = ({ onSuccess, onCancel, token, userId }) => {
           </select>
         </div>
 
-        <div style={styles.buttonGroup}>
-          <button type="submit" style={styles.submitBtn} disabled={loading}>
+        <div className="button-group">
+          <button type="submit" className="submit-btn" disabled={loading}>
             {loading ? "Assigning..." : "Assign Grade"}
           </button>
-          <button type="button" style={styles.cancelBtn} onClick={onCancel}>
+          <button type="button" className="cancel-btn" onClick={onCancel}>
             Cancel
           </button>
         </div>
@@ -142,48 +144,6 @@ const GradeForm = ({ onSuccess, onCancel, token, userId }) => {
   );
 };
 
-const styles = {
-  formContainer: {
-    backgroundColor: "white",
-    padding: "20px",
-    borderRadius: "8px",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-    maxWidth: "600px",
-    margin: "20px auto",
-  },
-  formGroup: {
-    marginBottom: "15px",
-  },
-  error: {
-    color: "#d32f2f",
-    backgroundColor: "#ffebee",
-    padding: "12px",
-    borderRadius: "4px",
-    marginBottom: "15px",
-  },
-  buttonGroup: {
-    display: "flex",
-    gap: "10px",
-    marginTop: "20px",
-  },
-  submitBtn: {
-    flex: 1,
-    padding: "10px",
-    backgroundColor: "#4CAF50",
-    color: "white",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-  },
-  cancelBtn: {
-    flex: 1,
-    padding: "10px",
-    backgroundColor: "#f44336",
-    color: "white",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-  },
-};
+// ...existing code...
 
 export default GradeForm;

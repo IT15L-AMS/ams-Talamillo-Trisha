@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import apiService from "../services/apiService";
+import "../styles/EnrollmentForm.css";
 
 const EnrollmentForm = ({ onSuccess, onCancel, token, studentId }) => {
   const [formData, setFormData] = useState({
@@ -58,15 +59,16 @@ const EnrollmentForm = ({ onSuccess, onCancel, token, studentId }) => {
   };
 
   return (
-    <div style={styles.formContainer}>
+    <div className="form-container">
       <h3>Enroll Student in Course</h3>
-      {error && <div style={styles.error}>{error}</div>}
+      {error && <div className="error">{error}</div>}
 
       <form onSubmit={handleSubmit}>
-        <div style={styles.formGroup}>
-          <label>Student:</label>
+        <div className="form-group">
+          <label htmlFor="student_id">Student:</label>
           <select
             name="student_id"
+            id="student_id"
             value={formData.student_id}
             onChange={handleChange}
             required
@@ -81,10 +83,11 @@ const EnrollmentForm = ({ onSuccess, onCancel, token, studentId }) => {
           </select>
         </div>
 
-        <div style={styles.formGroup}>
-          <label>Course:</label>
+        <div className="form-group">
+          <label htmlFor="course_id">Course:</label>
           <select
             name="course_id"
+            id="course_id"
             value={formData.course_id}
             onChange={handleChange}
             required
@@ -98,11 +101,11 @@ const EnrollmentForm = ({ onSuccess, onCancel, token, studentId }) => {
           </select>
         </div>
 
-        <div style={styles.buttonGroup}>
-          <button type="submit" style={styles.submitBtn} disabled={loading}>
+        <div className="button-group">
+          <button type="submit" className="submit-btn" disabled={loading}>
             {loading ? "Enrolling..." : "Enroll Student"}
           </button>
-          <button type="button" style={styles.cancelBtn} onClick={onCancel}>
+          <button type="button" className="cancel-btn" onClick={onCancel}>
             Cancel
           </button>
         </div>
@@ -111,48 +114,6 @@ const EnrollmentForm = ({ onSuccess, onCancel, token, studentId }) => {
   );
 };
 
-const styles = {
-  formContainer: {
-    backgroundColor: "white",
-    padding: "20px",
-    borderRadius: "8px",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-    maxWidth: "600px",
-    margin: "20px auto",
-  },
-  formGroup: {
-    marginBottom: "15px",
-  },
-  error: {
-    color: "#d32f2f",
-    backgroundColor: "#ffebee",
-    padding: "12px",
-    borderRadius: "4px",
-    marginBottom: "15px",
-  },
-  buttonGroup: {
-    display: "flex",
-    gap: "10px",
-    marginTop: "20px",
-  },
-  submitBtn: {
-    flex: 1,
-    padding: "10px",
-    backgroundColor: "#4CAF50",
-    color: "white",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-  },
-  cancelBtn: {
-    flex: 1,
-    padding: "10px",
-    backgroundColor: "#f44336",
-    color: "white",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-  },
-};
+// ...existing code...
 
 export default EnrollmentForm;
