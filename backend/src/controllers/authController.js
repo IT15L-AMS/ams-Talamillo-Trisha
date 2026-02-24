@@ -110,7 +110,11 @@ const login = asyncHandler(async (req, res) => {
   }
 
   // Generate tokens
-  const accessToken = TokenManager.generateAccessToken(user.id, user.role);
+  const accessToken = TokenManager.generateAccessToken(
+    user.id,
+    user.role,
+    user.email,
+  );
   const refreshToken = TokenManager.generateRefreshToken(user.id);
 
   res.status(200).json({
@@ -197,12 +201,19 @@ const refreshToken = asyncHandler(async (req, res) => {
 
   const newAccessToken = TokenManager.generateAccessToken(user.id, user.role);
 
+  // include email in new access token when refreshing
+  const newAccessTokenWithEmail = TokenManager.generateAccessToken(
+    user.id,
+    user.role,
+    user.email,
+  );
+
   res.status(200).json({
     success: true,
     message: "Token refreshed successfully",
     code: "TOKEN_REFRESH_SUCCESS",
     data: {
-      accessToken: newAccessToken,
+      accessToken: newAccessTokenWithEmail,
       expiresIn: process.env.JWT_EXPIRE || "7d",
     },
   });

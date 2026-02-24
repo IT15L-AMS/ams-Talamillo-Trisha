@@ -1,9 +1,27 @@
 const Enrollment = require("../models/Enrollment");
+const Student = require("../models/Student");
 
 const enrollStudent = async (req, res) => {
   try {
-    const { student_id, course_id } = req.body;
-    if (!student_id || !course_id) {
+    let { student_id, course_id } = req.body;
+    // If student_id not provided and requester is a student, map by email
+    if (!student_id) {
+      if ((req.user?.role || "").toLowerCase() === "student") {
+        const myStudent = await Student.getByEmail(req.user.email);
+        if (!myStudent) {
+          return res
+            .status(404)
+            .json({ success: false, message: "Student record not found" });
+        }
+        student_id = myStudent.id;
+      } else {
+        return res
+          .status(400)
+          .json({ success: false, message: "Missing required fields" });
+      }
+    }
+
+    if (!course_id) {
       return res
         .status(400)
         .json({ success: false, message: "Missing required fields" });

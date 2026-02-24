@@ -53,9 +53,32 @@ const getInstructorDashboard = async (req, res) => {
   }
 };
 
+const Student = require("../models/Student");
+
 const getStudentDashboard = async (req, res) => {
   try {
-    const studentId = req.params.student_id || req.user.userId;
+    let studentId = req.params.student_id;
+
+    // If no param or 'me', map authenticated user to student record
+    if (!studentId || studentId === "me") {
+      const email = req.user?.email;
+      if (!email) {
+        return res
+          .status(400)
+          .json({ success: false, message: "No user email available" });
+      }
+      const myStudent = await Student.getByEmail(email);
+      if (!myStudent) {
+        // Gracefully return empty dashboard when student record not found
+        return res.json({
+          success: true,
+          dashboard: { enrolled_courses: 0, grades_received: 0 },
+        });
+      }
+      studentId = myStudent.id;
+    }
+
+    studentId = parseInt(studentId, 10);
     const conn = await pool.getConnection();
     const [enrollments] = await conn.execute(
       `SELECT COUNT(*) as count FROM enrollments WHERE student_id=? AND dropped_at IS NULL`,
@@ -74,7 +97,8 @@ const getStudentDashboard = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    console.error("Get student dashboard error:", err);
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 

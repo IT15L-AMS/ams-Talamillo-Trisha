@@ -40,6 +40,19 @@ class Student {
     }
   }
 
+  static async getByEmail(email) {
+    const conn = await pool.getConnection();
+    try {
+      const [rows] = await conn.execute(
+        `SELECT * FROM students WHERE email = ? AND is_active = 1 LIMIT 1`,
+        [email],
+      );
+      return rows[0] || null;
+    } finally {
+      conn.release();
+    }
+  }
+
   static async update(id, { full_name, email, year_level, program }) {
     const conn = await pool.getConnection();
     try {

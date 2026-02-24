@@ -67,10 +67,32 @@ const deactivateStudent = async (req, res) => {
   }
 };
 
+const getMyStudent = async (req, res) => {
+  try {
+    const email = req.user?.email;
+    if (!email) {
+      return res
+        .status(400)
+        .json({ success: false, message: "No user email available" });
+    }
+    const student = await Student.getByEmail(email);
+    if (!student) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Student record not found" });
+    }
+    res.json({ success: true, student });
+  } catch (err) {
+    console.error("Get my student error:", err);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
 module.exports = {
   createStudent,
   getStudents,
   getStudentById,
   updateStudent,
   deactivateStudent,
+  getMyStudent,
 };

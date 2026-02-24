@@ -2,11 +2,12 @@ const jwt = require("jsonwebtoken");
 
 class TokenManager {
   //Generate Access Token
-   
-  static generateAccessToken(userId, role) {
+
+  static generateAccessToken(userId, role, email) {
     const payload = {
       userId,
       role,
+      email,
       type: "access",
     };
 
@@ -27,7 +28,6 @@ class TokenManager {
       algorithm: "HS256",
     });
   }
-
 
   static verifyAccessToken(token) {
     try {
@@ -54,7 +54,7 @@ class TokenManager {
   }
 
   //Decode token without verification
-   
+
   static decodeToken(token) {
     return jwt.decode(token);
   }

@@ -1,4 +1,5 @@
 const Grade = require("../models/Grade");
+const Student = require("../models/Student");
 
 const assignGrade = async (req, res) => {
   try {
@@ -39,7 +40,29 @@ const getGrades = async (req, res) => {
 
 const getStudentGrades = async (req, res) => {
   try {
-    const grades = await Grade.getByStudent(req.params.student_id);
+    let requestedStudentId = req.params.student_id;
+
+    // allow 'me' shortcut or missing id -> map using authenticated user's email
+    if (!requestedStudentId || requestedStudentId === "me") {
+      const myStudent = await Student.getByEmail(req.user.email);
+      if (!myStudent) {
+        // Return empty list when no student record exists
+        return res.json({ success: true, grades: [] });
+      }
+      requestedStudentId = myStudent.id;
+    }
+
+    requestedStudentId = parseInt(requestedStudentId, 10);
+
+    // If requester is a student, ensure they can only fetch their own grades
+    if ((req.user?.role || "").toLowerCase() === "student") {
+      const myStudent = await Student.getByEmail(req.user.email);
+      if (!myStudent || myStudent.id !== requestedStudentId) {
+        return res.status(403).json({ success: false, message: "Forbidden" });
+      }
+    }
+
+    const grades = await Grade.getByStudent(requestedStudentId);
     res.json({ success: true, grades });
   } catch (err) {
     console.error("Get student grades error:", err);
