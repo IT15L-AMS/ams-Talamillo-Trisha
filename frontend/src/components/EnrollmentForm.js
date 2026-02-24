@@ -14,6 +14,10 @@ const EnrollmentForm = ({ onSuccess, onCancel, token, studentId }) => {
 
   useEffect(() => {
     loadData();
+    // if no studentId was provided (self-enroll), fetch mapped student record
+    if (!studentId) {
+      fetchMyStudent();
+    }
   }, []);
 
   const loadData = async () => {
@@ -26,6 +30,18 @@ const EnrollmentForm = ({ onSuccess, onCancel, token, studentId }) => {
       setCourses(coursesRes.data.courses || []);
     } catch (err) {
       setError("Error loading students or courses");
+    }
+  };
+
+  const fetchMyStudent = async () => {
+    try {
+      const res = await apiService.getMyStudent(token);
+      const student = res.data.student;
+      if (student && student.id) {
+        setFormData((prev) => ({ ...prev, student_id: student.id }));
+      }
+    } catch (err) {
+      // ignore - leave selection available for manual choose
     }
   };
 
@@ -42,8 +58,16 @@ const EnrollmentForm = ({ onSuccess, onCancel, token, studentId }) => {
     setLoading(true);
     setError("");
 
-    if (!formData.student_id || !formData.course_id) {
-      setError("Please select both student and course");
+    const currentUser = JSON.parse(localStorage.getItem("user") || "null");
+    const isStudent = (currentUser?.role || "").toLowerCase() === "student";
+
+    if (!isStudent && !formData.student_id) {
+      setError("Please select a student");
+      setLoading(false);
+      return;
+    }
+    if (!formData.course_id) {
+      setError("Please select a course");
       setLoading(false);
       return;
     }
@@ -64,24 +88,27 @@ const EnrollmentForm = ({ onSuccess, onCancel, token, studentId }) => {
       {error && <div className="error">{error}</div>}
 
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="student_id">Student:</label>
-          <select
-            name="student_id"
-            id="student_id"
-            value={formData.student_id}
-            onChange={handleChange}
-            required
-            disabled={!!studentId}
-          >
-            <option value="">-- Select Student --</option>
-            {students.map((student) => (
-              <option key={student.id} value={student.id}>
-                {student.full_name} ({student.student_id})
-              </option>
-            ))}
-          </select>
-        </div>
+        {(JSON.parse(localStorage.getItem("user") || "null")?.role || "") !==
+          "student" && (
+          <div className="form-group">
+            <label htmlFor="student_id">Student:</label>
+            <select
+              name="student_id"
+              id="student_id"
+              value={formData.student_id}
+              onChange={handleChange}
+              required
+              disabled={!!studentId || !!formData.student_id}
+            >
+              <option value="">-- Select Student --</option>
+              {students.map((student) => (
+                <option key={student.id} value={student.id}>
+                  {student.full_name} ({student.student_id})
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         <div className="form-group">
           <label htmlFor="course_id">Course:</label>

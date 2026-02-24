@@ -29,6 +29,11 @@ const apiService = {
     axios.get(`${API_URL}/students`, {
       headers: { Authorization: `Bearer ${token}` },
     }),
+  // Get my student record (authenticated user)
+  getMyStudent: (token) =>
+    axios.get(`${API_URL}/students/me`, {
+      headers: { Authorization: `Bearer ${token}` },
+    }),
   getStudent: (id, token) =>
     axios.get(`${API_URL}/students/${id}`, {
       headers: { Authorization: `Bearer ${token}` },

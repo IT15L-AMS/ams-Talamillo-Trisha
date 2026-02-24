@@ -9,34 +9,37 @@ const StudentDashboard = ({ user }) => {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    apiService
-      .getStudentDashboard(token)
-      .then((res) => setDashboard(res.data.dashboard))
-      .catch(() => {});
-
-    const loadGrades = async () => {
+    const load = async () => {
       try {
-        const res = await apiService.getStudentGrades(user.id, token);
-        setGrades(res.data.grades || []);
+        // load dashboard (server maps 'me' using token/email)
+        const dashRes = await apiService.getStudentDashboard(token);
+        setDashboard(dashRes.data.dashboard);
+
+        // fetch grades using 'me' shortcut
+        const gradesRes = await apiService.getStudentGrades("me", token);
+        setGrades(gradesRes.data.grades || []);
       } catch (err) {
+        setDashboard(null);
         setGrades([]);
       }
     };
 
-    loadGrades();
+    load();
   }, [token, user]);
 
   const handleEnrollSuccess = () => {
     setShowEnrollForm(false);
-    // refresh dashboard and grades
-    apiService
-      .getStudentDashboard(token)
-      .then((res) => setDashboard(res.data.dashboard))
-      .catch(() => {});
-    apiService
-      .getStudentGrades(user.id, token)
-      .then((res) => setGrades(res.data.grades || []))
-      .catch(() => {});
+
+    (async () => {
+      try {
+        const dashRes = await apiService.getStudentDashboard(token);
+        setDashboard(dashRes.data.dashboard);
+        const gradesRes = await apiService.getStudentGrades("me", token);
+        setGrades(gradesRes.data.grades || []);
+      } catch (err) {
+        setGrades([]);
+      }
+    })();
   };
 
   return (
@@ -83,7 +86,7 @@ const StudentDashboard = ({ user }) => {
               onSuccess={handleEnrollSuccess}
               onCancel={() => setShowEnrollForm(false)}
               token={token}
-              studentId={user.id}
+              // EnrollmentForm will fetch student id server-side mapping via getMyStudent if studentId not provided
             />
           )}
         </div>
