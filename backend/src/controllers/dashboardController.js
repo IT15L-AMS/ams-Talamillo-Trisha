@@ -2,35 +2,33 @@ const pool = require("../config/database");
 
 const getAdminDashboard = async (req, res) => {
   try {
-    const [stats] = await pool.getConnection().then((conn) => {
-      const results = conn.execute(`
-        SELECT 
-          (SELECT COUNT(*) FROM students WHERE is_active=1) AS total_students,
-          (SELECT COUNT(*) FROM courses WHERE is_active=1) AS total_courses,
-          (SELECT COUNT(*) FROM enrollments WHERE dropped_at IS NULL) AS total_enrollments
-      `);
-      conn.release();
-      return results;
-    });
+    const conn = await pool.getConnection();
+    const [stats] = await conn.execute(`
+      SELECT 
+        (SELECT COUNT(*) FROM students WHERE is_active=1) AS total_students,
+        (SELECT COUNT(*) FROM courses WHERE is_active=1) AS total_courses,
+        (SELECT COUNT(*) FROM enrollments WHERE dropped_at IS NULL) AS total_enrollments
+    `);
+    conn.release();
     res.json({ success: true, dashboard: stats[0] });
   } catch (err) {
+    console.error("Admin dashboard error:", err);
     res.status(500).json({ success: false, message: err.message });
   }
 };
 
 const getRegistrarDashboard = async (req, res) => {
   try {
-    const [stats] = await pool.getConnection().then((conn) => {
-      const results = conn.execute(`
-        SELECT 
-          (SELECT COUNT(*) FROM students WHERE is_active=1) AS total_students,
-          (SELECT COUNT(*) FROM enrollments WHERE dropped_at IS NULL) AS total_enrollments
-      `);
-      conn.release();
-      return results;
-    });
+    const conn = await pool.getConnection();
+    const [stats] = await conn.execute(`
+      SELECT 
+        (SELECT COUNT(*) FROM students WHERE is_active=1) AS total_students,
+        (SELECT COUNT(*) FROM enrollments WHERE dropped_at IS NULL) AS total_enrollments
+    `);
+    conn.release();
     res.json({ success: true, dashboard: stats[0] });
   } catch (err) {
+    console.error("Registrar dashboard error:", err);
     res.status(500).json({ success: false, message: err.message });
   }
 };

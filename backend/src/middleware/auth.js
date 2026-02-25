@@ -43,6 +43,7 @@ const authenticate = (req, res, next) => {
 /**
  * Role-Based Authorization Middleware
  * Check if user has required role
+ * RBAC Login
  */
 const authorize = (...allowedRoles) => {
   return (req, res, next) => {

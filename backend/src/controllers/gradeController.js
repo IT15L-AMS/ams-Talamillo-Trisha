@@ -3,7 +3,10 @@ const Student = require("../models/Student");
 
 const assignGrade = async (req, res) => {
   try {
-    const { enrollment_id, grade, assigned_by } = req.body;
+    const { enrollment_id, grade } = req.body;
+    // use authenticated user as assigned_by if not provided
+    const assigned_by = req.body.assigned_by || req.user?.userId || null;
+
     if (!enrollment_id || !grade) {
       return res
         .status(400)
