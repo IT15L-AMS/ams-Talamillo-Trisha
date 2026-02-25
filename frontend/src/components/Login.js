@@ -78,9 +78,21 @@ const Login = ({ onLogin }) => {
           </button>
         </form>
         <div className="login-demo">
-          <p>Demo Credentials:</p>
-          <p>Email: admin@example.com</p>
-          <p>Password: (check database)</p>
+          <p>
+            <strong>Demo Test Accounts:</strong>
+          </p>
+          <p>
+             <strong>Admin:</strong> admin@test.com / Admin@123
+          </p>
+          <p>
+             <strong>Registrar:</strong> registrar@test.com / Registrar@123
+          </p>
+          <p>
+             <strong>Instructor:</strong> instructor@test.com / Instructor@123
+          </p>
+          <p>
+             <strong>Student:</strong> student@test.com / Student@123
+          </p>
         </div>
       </div>
     </div>

@@ -127,6 +127,7 @@ const EnrollmentManagement = ({ token, user }) => {
           onSuccess={handleGradeSuccess}
           onCancel={() => setShowGradeForm(false)}
           token={token}
+          userId={user?.id}
         />
       )}
 

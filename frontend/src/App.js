@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import Login from "./components/Login";
 import AdminDashboard from "./components/AdminDashboard";
+import RegistrarDashboard from "./components/RegistrarDashboard";
 import InstructorDashboard from "./components/InstructorDashboard";
 import StudentDashboard from "./components/StudentDashboard";
 import StudentList from "./components/StudentList";
@@ -92,7 +93,7 @@ function App() {
               Dashboard
             </Link>
 
-            {(user.role === "admin" || user.role === "registrar") && (
+            {user.role === "admin" && (
               <>
                 <Link to="/students" style={styles.navLink}>
                   Students
@@ -105,6 +106,20 @@ function App() {
                 </Link>
                 <Link to="/users" style={styles.navLink}>
                   Users
+                </Link>
+              </>
+            )}
+
+            {user.role === "registrar" && (
+              <>
+                <Link to="/students" style={styles.navLink}>
+                  Students
+                </Link>
+                <Link to="/courses" style={styles.navLink}>
+                  Courses
+                </Link>
+                <Link to="/enrollments" style={styles.navLink}>
+                  Enrollments
                 </Link>
               </>
             )}
@@ -145,11 +160,11 @@ function App() {
           {user.role === "registrar" && (
             <Route
               path="/"
-              element={<AdminDashboard user={user} token={token} />}
+              element={<RegistrarDashboard user={user} token={token} />}
             />
           )}
 
-          {(user.role === "admin" || user.role === "registrar") && (
+          {user.role === "admin" && (
             <>
               <Route
                 path="/students"
@@ -164,6 +179,23 @@ function App() {
                 element={<EnrollmentManagement user={user} token={token} />}
               />
               <Route path="/users" element={<UserManagement token={token} />} />
+            </>
+          )}
+
+          {user.role === "registrar" && (
+            <>
+              <Route
+                path="/students"
+                element={<StudentManagement user={user} token={token} />}
+              />
+              <Route
+                path="/courses"
+                element={<CourseManagement user={user} token={token} />}
+              />
+              <Route
+                path="/enrollments"
+                element={<EnrollmentManagement user={user} token={token} />}
+              />
             </>
           )}
 
